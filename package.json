@@ -7,6 +7,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/delius-unicase": "^0.2.3",
+    "@expo-google-fonts/kotta-one": "^0.2.3",
     "@expo-google-fonts/montserrat": "^0.2.3",
     "@expo/vector-icons": "^13.0.0",
     "@react-native-async-storage/async-storage": "^1.22.3",

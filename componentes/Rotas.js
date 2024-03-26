@@ -1,21 +1,21 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createStackNavigator } from '@react-navigation/stack';
 
-import Login from "../telas/Login";
-import Cadastro from "../telas/Cadastro";
+import Home from '../telas/Home'; import Login from '../telas/Login'; import Cadastro from '../telas/Cadastro';
 
-const Stack = createNativeStackNavigator()
+const Stack = createStackNavigator();
 
-export default function Routes() {
+export default function Rotas() {
 
-  return (
+    return(
 
-    <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false, }} >
+        <Stack.Navigator>
 
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Cadastro" component={Cadastro} />
+            <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
+            <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
+            <Stack.Screen name="Cadastro" component={Cadastro} options={{headerShown: false}}/>
 
-    </Stack.Navigator>
+        </Stack.Navigator>
 
-  );
-  
-};
+    );
+
+}

@@ -1,29 +1,34 @@
 import { StyleSheet } from "react-native";
+import { useFonts, DeliusUnicase_400Regular } from '@expo-google-fonts/delius-unicase';
+import { KottaOne_400Regular } from '@expo-google-fonts/kotta-one';
 
 export const estilizar = () => {
 
-    return StyleSheet.create({
+    let [ fontsLoaded, fontError ] = useFonts({ DeliusUnicase_400Regular, KottaOne_400Regular }) 
 
-        container: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-        
-        vheader: { flexDirection: 'row', justifyContent: 'space-between' },
+    if ( !fontsLoaded && !fontError ) { return {}; }
+    else {
 
-        voltar: { width: 34, height: 40, margin: 10 },
+        return StyleSheet.create({
 
-        nosz: { width: 170, height: 170, alignSelf: 'flex-end', zIndex: -1 },
+            container: { flex: 1, backgroundColor: '#b3ffec', alignItems: 'center', justifyContent: 'center' },
 
-        t1: { textAlign: 'left', fontSize: 35, fontWeight: 'bold', color: '#000', alignSelf: 'flex-start' },
+            content: { backgroundColor: '#004d00', borderRadius: 10, padding: 20, width: '80%', maxWidth: 400, alignItems: 'center' },
 
-        t2: { textAlign: 'left', fontSize: 35, alignSelf: 'flex-start', color: '#e36216' },
+            titulo: { fontFamily: "DeliusUnicase_400Regular", fontSize: 24, fontWeight: 'bold', marginBottom: 10, color: '#b3ff66' },
 
-        txt: { fontSize: 18, color: '#565656', alignSelf: 'flex-start' },
+            dados: { fontFamily: "KottaOne_400Regular", color: "#4dff4d", fontSize: 16, alignSelf: 'flex-start', marginBottom: 5, width: '100%' },
 
-        input: { borderBottomColor: '#000000', borderBottomWidth: 1, color: '#131313', height: 35, fontSize: 19, margin: 15 },
-        
-        content: { flex: 1, justifyContent: 'space-between', backgroundColor: '#ecf0f1', margin: 10, padding: 18, width: '100%', height: '100%' },
-        
-        buttonview: { flexDirection: 'column', justifyContent: 'space-between', justifyContent: 'center', alignItems: 'center' },
+            input: { backgroundColor: '#99ff99', borderRadius: 8, width: '100%', paddingVertical: 10, paddingHorizontal: 15, marginBottom: 15, fontSize: 16, color: '#3E4E5E'  },
+            
+            botao: { backgroundColor: "#66cc00", borderRadius: 8, width: '100%', paddingVertical: 12, alignItems: 'center' },
 
-    });
+            txtBotao: { fontSize: 18, fontWeight: 'bold', color: '#FFFFFF' },
 
+            msgErro: { color: '#FF4242', marginTop: 10 },
+
+        })
+
+    }
+    
 }
