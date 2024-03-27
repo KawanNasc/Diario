@@ -1,41 +1,43 @@
-import React, { useEffect } from 'react';
-import { SafeAreaView, TouchableOpacity, SafeAreaView, View, Text, StyleSheet, Alert } from 'react-native';
-import { MaterialCommunityIcons } from "@expo/vector-icons"/
+import React, { useState, useEffect } from 'react';
+import { SafeAreaView, TouchableOpacity, View, Text, FlatList, StyleSheet, Alert } from 'react-native';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from '@expo/vector-icons';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getFirestore, collection, doc, deleteDoc, onSnapshot } from 'firebase/firestore';
+import Firebase from '../componentes/firebaseConfig';
 import { estilizar } from '../componentes/EstilosGerais';
-import { getAuth, onAuthStateChanged, signOut } from '@firebase/auth';
-import firebaseConfig from '../componentes/firebaseConfig';
-import { FlatList } from 'react-native-gesture-handler';
 
 export default function Home({ navigation }) {
-
+  
   const auth = getAuth();
-
+  const [diario, setDiario] = useState([]);
   const estilosGerais = estilizar();
+  const firestore = getFirestore()
 
   function deleteDiario(id) {
 
-    firebaseConfig.collection("diario").doc(id).delete();
-    
-    Alert.alert("Diário deletado");
+    deleteDoc(doc(collection(Firebase, 'diario'), id))
+
+      .then(() => {  Alert.alert('Diário deletado'); })
+      .catch((error) => { console.error('Erro ao deletar diário:', error.message); });
 
   }
 
   useEffect(() => {
 
-    firebaseConfig.collection("diario").onSnapshot((query => {
+    const unsubscribeDiario = onSnapshot(collection(firestore, 'diario'), (querySnapshot) => {
 
-      const lista=[];
-      query.forEach( doc => { lista.push({...doc.data(), id: doc.id}) });
+      const lista = [];
+      querySnapshot.forEach((doc) => { lista.push({ ...doc.data(), id: doc.id }); });
       setDiario(lista);
 
-    }))
+    }); 
 
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (!user) { navigation.navigate('Login'); }
     });
 
-    return () => unsubscribe(); 
+    return () => { unsubscribeDiario(); unsubscribeAuth(); };
 
   }, [auth, navigation]);
 
@@ -57,30 +59,30 @@ export default function Home({ navigation }) {
       <View style={estilosGerais.content}>
 
         <Text style={estilosGerais.titulo}> Sobre hj! </Text>
-        <Text style={estilos.data}> Data: 25/03/2024 </Text>
-        <Text style={estilos.descricao}> Um dia complicado, mas seguindo em frente! </Text>
+        <Text style={estilosGerais.dados}> Data: 25/03/2024 </Text>
+        <Text style={estilosGerais.dados}> Um dia complicado, mas seguindo em frente! </Text>
 
       </View>
 
       <FlatList data={diario} renderItem={({ item }) => (
-
-          <TouchableOpacity onPress={() => navigation.navigate('AlterarDiario', {
+        <View>
+          <TouchableOpacity onPress={() => navigation.navigate('Alterar', {
 
                 id: item.id,
-                data: item.data,
+                data: item.data.toDate(),
                 descricao: item.descricao,
                 local: item.local,
 
-          })}>
+          }) }>
 
             <SafeAreaView>
 
               <View style={estilos.lista}>
 
-                <Text style={estilos.id}>Id: {item.id}</Text>
-                <Text style={estilos.data}>Data: {item.data}</Text>
-                <Text style={estilos.descricao}>Descrição: {item.descricao}</Text>
-                <Text style={estilos.local}>Local: {item.local}</Text>
+                <Text style={estilosGerais.titulo}> Título: {item.titulo} </Text>
+                <Text style={estilosGerais.dados}> Data: {item.data.toDate().toLocaleDateString()} </Text>
+                <Text style={estilosGerais.dados}> Descrição: {item.descricao} </Text>
+                <Text style={estilosGerais.dados}> Local: {item.local} </Text>
 
               </View>
 
@@ -88,28 +90,38 @@ export default function Home({ navigation }) {
 
           </TouchableOpacity>
 
-          <View style={estilos.botaoDeletar}>
+          <View style={estilosGerais.botao}>
 
-            <TouchableOpacity onPress={() => {deleteDiario(item.id)}}>
-
-              <MaterialCommunityIcons name="plus-circleoutline" size={70} color="green" />
-
+            <TouchableOpacity onPress={() => deleteDiario(item.id)}>
+              <MaterialCommunityIcons name="delete-empty" size={70} color="red" />
             </TouchableOpacity>
 
           </View>
 
-        )}
-          
-      />
+        </View>
+
+      )} />
+
+      <View style={estilosGerais.botao}>
+
+        <TouchableOpacity onPress={() => navigation.navigate("Adicionar")}>
+          <MaterialCommunityIcons name="plus-circle-outline" size={70} color="green" />
+        </TouchableOpacity>
+
+      </View>
 
     </SafeAreaView>
+
   );
+
 }
 
 const estilos = StyleSheet.create({
 
   data: { fontSize: 16, color: "#66b3ff", marginBottom: 5 },
   descricao: { fontSize: 20, fontWeight: 'bold', color: "#b366ff" },
-  sair: { position: "absolute", top: 20,  left: 20, borderRadius: 20, padding: 10, zIndex: 1, color: "#ff0000" }
+  sair: { position: "absolute", top: 20,  left: 20, borderRadius: 20, padding: 10, zIndex: 1, color: "#ff0000" },
+  lista: { margin: 10, padding: 10 },
+
 
 });

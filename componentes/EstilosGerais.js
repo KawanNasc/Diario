@@ -11,7 +11,7 @@ export const estilizar = () => {
 
         return StyleSheet.create({
 
-            container: { flex: 1, backgroundColor: '#b3ffec', alignItems: 'center', justifyContent: 'center' },
+            container: { flex: 1, backgroundColor: '#003399', alignItems: 'center', justifyContent: 'center' },
 
             content: { backgroundColor: '#004d00', borderRadius: 10, padding: 20, width: '80%', maxWidth: 400, alignItems: 'center' },
 
@@ -21,7 +21,7 @@ export const estilizar = () => {
 
             input: { backgroundColor: '#99ff99', borderRadius: 8, width: '100%', paddingVertical: 10, paddingHorizontal: 15, marginBottom: 15, fontSize: 16, color: '#3E4E5E'  },
             
-            botao: { backgroundColor: "#66cc00", borderRadius: 8, width: '100%', paddingVertical: 12, alignItems: 'center' },
+            botao: { backgroundColor: "#66cc00", borderRadius: 8, width: '100%', paddingVertical: 12, alignItems: 'center', margin: 5 },
 
             txtBotao: { fontSize: 18, fontWeight: 'bold', color: '#FFFFFF' },
 

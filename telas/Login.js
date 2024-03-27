@@ -54,8 +54,8 @@ export default function Login({navigation}) {
                   <Text style={estilosGerais.txtBotao}> Entrar </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity onPress={navegarParaCadastro}>
-                  <Text style={estilosGerais.cadastrar}> Realize aqui seu cadastro </Text>
+                <TouchableOpacity style={estilosGerais.botao} onPress={navegarParaCadastro}>
+                  <Text style={estilosGerais.txtBotao}> Realize aqui seu cadastro </Text>
                 </TouchableOpacity>
 
                 { errorMessage ? <Text style={estilosGerais.msgErro}> {errorMessage} </Text> : null }
