@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, TouchableOpacity, View, Text, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView, TouchableOpacity, SafeAreaView, View, Text, StyleSheet, Alert } from 'react-native';
+import { MaterialCommunityIcons } from "@expo/vector-icons"/
 import { Ionicons } from '@expo/vector-icons';
 import { estilizar } from '../componentes/EstilosGerais';
 import { getAuth, onAuthStateChanged, signOut } from '@firebase/auth';
@@ -61,11 +62,45 @@ export default function Home({ navigation }) {
 
       </View>
 
-      <FlatList>
+      <FlatList data={diario} renderItem={({ item }) => (
 
+          <TouchableOpacity onPress={() => navigation.navigate('AlterarDiario', {
 
+                id: item.id,
+                data: item.data,
+                descricao: item.descricao,
+                local: item.local,
 
-      </FlatList>
+          })}>
+
+            <SafeAreaView>
+
+              <View style={estilos.lista}>
+
+                <Text style={estilos.id}>Id: {item.id}</Text>
+                <Text style={estilos.data}>Data: {item.data}</Text>
+                <Text style={estilos.descricao}>Descrição: {item.descricao}</Text>
+                <Text style={estilos.local}>Local: {item.local}</Text>
+
+              </View>
+
+            </SafeAreaView>
+
+          </TouchableOpacity>
+
+          <View style={estilos.botaoDeletar}>
+
+            <TouchableOpacity onPress={() => {deleteDiario(item.id)}}>
+
+              <MaterialCommunityIcons name="plus-circleoutline" size={70} color="green" />
+
+            </TouchableOpacity>
+
+          </View>
+
+        )}
+          
+      />
 
     </SafeAreaView>
   );
