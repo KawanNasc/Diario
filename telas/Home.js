@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { SafeAreaView, TouchableOpacity, View, Text, FlatList, StyleSheet, Alert } from 'react-native';
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from '@expo/vector-icons';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { getFirestore, collection, doc, deleteDoc, onSnapshot } from 'firebase/firestore';
-import Firebase from '../componentes/firebaseConfig';
 import { estilizar } from '../componentes/EstilosGerais';
 
 export default function Home({ navigation }) {
@@ -16,11 +15,10 @@ export default function Home({ navigation }) {
 
   function deleteDiario(id) {
 
-    deleteDoc(doc(collection(Firebase, 'diario'), id))
-
-      .then(() => {  Alert.alert('Diário deletado'); })
+    deleteDoc(doc(firestore, 'diario', id))
+      .then(() => { Alert.alert('Diário deletado'); })
       .catch((error) => { console.error('Erro ao deletar diário:', error.message); });
-
+      
   }
 
   useEffect(() => {
@@ -69,7 +67,7 @@ export default function Home({ navigation }) {
           <TouchableOpacity onPress={() => navigation.navigate('Alterar', {
 
                 id: item.id,
-                data: item.data.toDate(),
+                data: item.data instanceof Date ? item.data.toDate() : null,
                 descricao: item.descricao,
                 local: item.local,
 
@@ -80,7 +78,7 @@ export default function Home({ navigation }) {
               <View style={estilos.lista}>
 
                 <Text style={estilosGerais.titulo}> Título: {item.titulo} </Text>
-                <Text style={estilosGerais.dados}> Data: {item.data.toDate().toLocaleDateString()} </Text>
+                <Text style={estilosGerais.dados}> Data: {item.data instanceof Date ? item.data.toLocaleDateString() : "Data inválida"} </Text>
                 <Text style={estilosGerais.dados}> Descrição: {item.descricao} </Text>
                 <Text style={estilosGerais.dados}> Local: {item.local} </Text>
 

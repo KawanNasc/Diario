@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { estilizar } from "../componentes/EstilosGerais";
+import { getFirestore, collection, doc, updateDoc, onSnapshot } from 'firebase/firestore';
 import firebaseConfig from '../componentes/firebaseConfig';
+
+const firestore = getFirestore();
 
 export default function Alterar({ navigation, route }) {
 
@@ -16,24 +19,18 @@ export default function Alterar({ navigation, route }) {
 
         const id = route.params?.id; 
 
-        if (!id) {  Alert.alert("Erro", "ID do registro não encontrado. Por favor, tente novamente."); return }
+        if (!id) { Alert.alert("Erro", "ID do registro não encontrado. Por favor, tente novamente."); return }
 
-        firebaseConfig.collection("diario").doc(id).update({
+        updateDoc(doc(collection(firestore, "diario"), id), {
 
             titulo: titulo,
             data: data,
             descricao: descricao,
-            local: local,
+            local: local
             
         })
-        .then(() => {
-            Alert.alert("Cadastro", "Registro adicionado com sucesso");
-            navigation.navigate("Home");
-        })
-        .catch((error) => {
-            console.error("Erro ao atualizar registro:", error);
-            Alert.alert("Erro", "Ocorreu um erro ao atualizar o registro. Por favor, tente novamente.");
-        });
+        .then(() => { Alert.alert("Cadastro", "Registro alterado com sucesso"); navigation.navigate("Home"); })
+        .catch((error) => { console.error("Erro ao atualizar registro:", error); Alert.alert("Erro", "Ocorreu um erro ao atualizar o registro. Por favor, tente novamente."); });
 
     }
 
@@ -51,6 +48,10 @@ export default function Alterar({ navigation, route }) {
                 <TextInput style={estilosGerais.input} placeholder="Digite a data" onChangeText={setData} value={data} />
                 <TextInput style={estilosGerais.input} placeholder="Digite a descrição" onChangeText={setDescricao} value={descricao} />
                 <TextInput style={estilosGerais.input} placeholder="Digite o local" onChangeText={setLocal} value={local} />
+
+                <TouchableOpacity style={estilosGerais.botao} onPress={() => navigation.navigate("Home")}>
+                    <Text style={estilosGerais.txtBotao}> Voltar </Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity style={estilosGerais.botao} onPress={() => altDiario(titulo, data, descricao, local)}>
                     <Text style={estilosGerais.txtBotao}>Alterar</Text>

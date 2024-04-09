@@ -19,7 +19,7 @@ export const estilizar = () => {
 
             dados: { fontFamily: "KottaOne_400Regular", color: "#4dff4d", fontSize: 16, alignSelf: 'flex-start', marginBottom: 5, width: '100%' },
 
-            input: { backgroundColor: '#99ff99', borderRadius: 8, width: '100%', paddingVertical: 10, paddingHorizontal: 15, marginBottom: 15, fontSize: 16, color: '#3E4E5E'  },
+            input: { backgroundColor: '#99ff99', borderRadius: 8, width: 215, paddingVertical: 10, paddingHorizontal: 15, marginBottom: 15, fontSize: 16, color: '#3E4E5E'  },
             
             botao: { backgroundColor: "#66cc00", borderRadius: 8, width: '100%', paddingVertical: 12, alignItems: 'center', margin: 5 },
 
